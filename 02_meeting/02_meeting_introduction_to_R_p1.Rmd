@@ -1,0 +1,316 @@
+---
+title: 'Meeting #2: Introduction to R (Part 1)'
+author: "Soane Mota"
+date: "March 9, 2019"
+output:
+  html_document: default
+  word_document: default
+---
+
+## Assignment operator
+The symbol `<-` assign value to a symbol.
+
+
+```{r}
+x <- 10 
+print(x)
+
+txt <- "Hello World!"
+txt
+```
+
+The # character indicates a comment. Anything to the right of the # (including the # itself) is ignored. This is the only comment character in R. 
+
+<span style="color:red">**Exercise 1:**</span> What happen if you run the following code in your R script?
+```
+x <- # This expression is incomplete
+```
+```{r}
+x <- 101 # nothing printed
+x      # auto-printing occurs
+
+print(x) # explicit printing
+```
+
+The `[1]` in the output indicates that `x` is a vector and `101` is its first element.
+
+```{r}
+y <- 3:17
+y
+```
+
+The numbers in the `[]` are not part of the vector itself.
+
+The operator `:` is used to create a interger sequence. 
+
+<span style="color:red">**Exercise 2:**</span> In your Exercise R script, create a sequence of integer from 2000 to 2010.
+
+## R Objects
+
+### Data types
+
+R has 5 basic atomic classes
+
+* logical (e.g., TRUE, FALSE)
+* integer (e.g,, 5L, as.integer(2))
+* numeric (real or decimal) (e.g, 3, 4.5, pi)
+* complex (e.g, 1 + 0i, 1 + 4i)
+* character (e.g, "a", "hi")
+
+To explicity declare an integer, you need specify the `L` suffix.
+
+A special number is `Inf` which represents infinity. You can use `Inf` in ordinary calculations; e.g. `1 / Inf` is 0.
+
+### Data structures
+R also has many data structures. These include
+
+* vector
+* matrix
+* list
+* factors
+* data frame
+
+####  Vector
+It is the most common and basic data structure.
+*Empty vector*: You can create a vector pre-defining the length and/or type.
+
+```{r}
+x0 <- vector() # empty vector
+
+x1 <- vector(length = 10) # with a pre-defined length
+
+## with a length and type
+x2 <- vector("character", length = 10)
+x3 <- vector("numeric", length = 10)
+x4 <- vector("integer", length = 10)
+x5 <- vector("logical", length = 10)
+```
+You can examine your vector using 
+```
+typeof(x)
+length(x)
+class(x)
+str(x)
+```
+<span style="color:red">**Exercise 3:**</span> In your Exercise R script, print and examine the vectors `x0, x1, x2, x3, x4, and x5`.
+
+You can also create vectors using the `c()` function.
+
+```{r}
+num_vec <- c(1,2,3,4,5) # numeric vector
+num_vec
+```
+
+To explicitly create a vector of integers:
+```{r}
+int_vec <- c(1L,2L,3L,4L,5L) # vector of integers
+int_vec
+```
+
+To create a logical vector:
+```{r}
+logical_vec <- c(TRUE, TRUE, FALSE) # logical vector
+logical_vec
+```
+
+To create character vector:
+```{r}
+char_vec <- c("apple", "pear", "banana","grape") # character vector
+char_vec
+```
+
+You can also add elements to your vector.
+```{r}
+int_vec <- c(int_vec,6L)
+int_vec
+```
+
+<span style="color:red">**Exercise 4:**</span> In your Exercise R script, add two more fruits to the `char_vec`.
+
+**Attention** Vectors have only one type, if you add more than on type to your vector, R will create a vector that is the least common denominator following the coersion rule`logical < integer < numeric < complex < character`.
+
+
+<span style="color:red">**Exercise 5:**</span> In your Exercise R script, without running the code, guess what is the vector result.
+```
+x <- c(10.1, "b")
+x <- c(TRUE, 33)
+x <- c("city", TRUE)
+```
+
+Objects can be explicitly coerced using `as.<class_name>`
+
+```{r}
+x <- 1:5
+as.numeric(x)
+as.logical(x)
+as.character(x)
+as.complex(x)
+
+```
+####  Matrix
+Matrices are vectors with a dimension attribute.
+```{r}
+m <- matrix(nrow = 2, ncol = 3) 
+m
+dim(m)
+attributes(m)
+```
+Matrices are constructed column-wise, so entries can be thought of starting in the "upper left" corner and running down the columns.
+```{r}
+m <- matrix(1:6, nrow = 2, ncol = 3) 
+m
+```
+Matrices can also be created directly from vectors by adding a dimension attribute.
+```{r}
+m <- 1:10 
+m
+```
+```{r}
+dim(m) <- c(2, 5)
+m
+```
+
+Matrices can be created by column-binding or row-binding with the `cbind()` and `rbind()` functions.
+
+```{r}
+x <- 1:3
+y <- 10:12
+z_column <- cbind(x, y)
+z_row <- rbind(x, y) 
+```
+
+####  List
+List is a special type of vector that can contain elements of different classes.
+
+Lists can be explicitly created using the `list()` or coerce other objects using `as.list()` function.
+
+```{r}
+x <- list(3:7, "a", TRUE, 1+4i)
+x
+```
+```{r}
+x <- 3:10
+x <- as.list(x)
+length(x)
+```
+<span style="color:red">**Exercise 6:**</span> In your Exercise R script, run the code above. What is the class of `x[1]`? how about `x[[1]]`?
+
+####  Factors 
+Factors are used to represent categorical data and can be unordered or ordered. 
+
+Factor objects can be created with the `factor()`   function.
+```{r}
+x <- factor(c("yes", "yes", "no", "yes", "no")) 
+x
+```
+
+```{r}
+table(x) 
+x
+```
+```{r}
+unclass(x)  
+attr(x,"levels")
+```
+
+The order of the levels of a factor can be set using the `levels` argument to `factor()`. 
+
+```{r}
+x <- factor(c("yes", "yes", "no", "yes", "no"))
+x  ## Levels are put in alphabetical order
+```
+```{r}
+x <- factor(c("yes", "yes", "no", "yes", "no"), 
+            levels = c("yes", "no"))
+x
+```
+
+<span style="color:red">**Exercise 7:**</span> In your Exercise R script, order the fruits names bellow by their sizes.
+```
+"Apple","Blueberry","Grape","Grapefruit","Plum","Watermelon" 
+```
+
+
+####  Data frame
+
+Data frames are used to store tabular data in R.
+Hadley Wickham's package [dplyr](https://github.com/tidyverse/dplyr) has an optimized set of functions designed to work efficiently with data frames.
+
+Caracteristics of a data frame:
+
+* Each column of a data frame have the same length.
+* Data frames have column names and to indicate information about each row of the data frame, we can use the atribute `row.names`
+* Unlike matrices, data frames can store different classes of objects in each column. 
+
+A data frame can be created by reading in a dataset using the `read.table()` or `read.csv()`, be created explicitly with the `data.frame()` function, or they can be coerced from other types of objects like lists.
+
+Data frames can be converted to a matrix by calling `data.matrix()`. 
+
+```{r}
+df <- data.frame(id = letters[1:10], x = 1:10, y = rnorm(10)) 
+df
+nrow(df)
+ncol(df)
+names(df)
+names(df ) <- c("Identity","Position","Value")
+names(df)
+row.names(df) # show the row names
+row.names(df) <- c("a1","a2","a3","a4","a5","a6","a7","a8","a9","a10") # assign row names to data frame
+row.names(df) # show the row names
+
+```
+
+
+#### Missing Values
+
+Missing values are denoted by `NA` or `NaN` for undefined mathematical operations.
+
+* `is.na()` is used to test objects if they are `NA`
+
+* `is.nan()` is used to test for `NaN`
+
+`NA` values have a class also, so there are integer `NA`, character `NA`, etc.
+
+* A `NaN` value is also `NA` but the converse is not true
+
+```{r}
+## Create a vector with NAs in it
+x <- c(1, 2, NA, 10, 3)  
+## Return a logical vector indicating which elements are NA
+is.na(x)    
+
+## Return a logical vector indicating which elements are NaN
+is.nan(x)   
+
+## Now create a vector with both NA and NaN values
+x <- c(1, 2, NaN, NA, 4)
+is.na(x)
+is.nan(x)
+```
+
+<span style="color:red">**Exercise 8:**</span> In your Exercise R script:
+1. Create the following data frame `df`. 
+```{r , echo=FALSE}
+ex8 <- data.frame(Var1 = letters[1:5], x = c(1.2,1.0,3.3,0.84,5), y = c("Apple","Apple","Orange","Banana","Coconut"),z = c("yes","yes","no","no","no"), k = round(rnorm(5,15),2)) 
+knitr::kable(ex8)
+```
+
+
+2. Change the variable names (Var1, x, y, z, k) to (ID,Cost_unit,Fruit,Color_red,Price)
+
+3. Order the `Fruit` levels as (Banana < Apple < Orange < Coconut) and `Color_red` levels as (no < yes)  
+
+
+
+
+
+
+# Congratulations Ladies, we did it!
+
+![](https://media.giphy.com/media/PdKuFuIwnfRC0/giphy.gif)
+
+#Thanks for coming today! 
+
+
+Sources used for this code can be found [here](https://bookdown.org/rdpeng/rprogdatascience/)
+and [here](http://www.diegobarneche.com/2014-12-11-ufsc/lessons/01-intro_r/data-structures.html)
