@@ -1,0 +1,15 @@
+Employee_ID,FirstName,LastName,Education,Occupation,YearlyIncome,Sales
+1,"John","Yang","Bachelors","Professional",90000,3578.27
+2,"Rob","Johnson","Bachelors","Management",80000,3399.9899999999998
+3,"Ruben","Torres","Partial College","Skilled Manual",50000,699.09820000000002
+4,"Christy","Zhu","Bachelors","Professional",80000,3078.27
+5,"Rob","Huang","High School","Skilled Manual",60000,2319.9899999999998
+6,"John","Ruiz","Bachelors","Professional",70000,539.99000000000001
+7,"John","Miller","Masters Degree","Management",80000,2320.4899999999998
+8,"Christy","Mehta","Partial High School","Clerical",50000,24.989999999999998
+9,"Rob","Verhoff","Partial High School","Clerical",45000,24.989999999999998
+10,"Christy","Carlson","Graduate Degree","Management",70000,2234.9899999999998
+11,"Gail","Erickson","Education","Professional",90000,4319.9899999999998
+12,"Barry","Johnson","Education","Management",80000,4968.5900000000001
+13,"Peter","Krebs","Graduate Degree","Clerical",50000,59.530000000000001
+14,"Greg","Alderson","Partial High School","Clerical",45000,23.5
