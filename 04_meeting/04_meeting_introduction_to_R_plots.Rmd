@@ -1,0 +1,185 @@
+---
+title: 'Meeting #4: Introduction to R - Plots'
+author: "Soane Mota"
+date: "March 23, 2019"
+output:
+  html_document: default
+---
+
+Today, we will start creating beautiful visualization with R.
+
+[Wikipedia](https://en.wikipedia.org/wiki/Visualization_(graphics)) defines that visualization "is any technique for creating images, diagrams, or animations to communicate a message."
+
+Before we start coding, I'd like to invite you to watch this amazing visualization presentation made by the swedish stats guru and public educator Hans Rosling.
+
+"In this spectacular section of The Joy Of Stats, broadcast by the BBC in 2010, he tells the story of the world in 200 countries over 200 years using 120,000 numbers - in just four minutes."
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Z8t4k0Q8e8Y" frameborder="0" allowfullscreen></iframe>
+
+
+## Tidyverse package
+
+We will start using the [`tidyverse`](https://tidyverse.tidyverse.org/) package.
+
+"The tidyverse is a set of packages that work in harmony because they share common data representations and API design. The tidyverse package is designed to make it easy to install and load core packages from the tidyverse in a single command."
+
+`library(tidyverse)` will load the core tidyverse packages:
+
+* **ggplot2**, for data visualisation.
+* **dplyr**, for data manipulation.
+* **tidyr**, for data tidying.
+* **readr**, for data import.
+* **purrr**, for functional programming.
+* **tibble**, for tibbles, a modern re-imagining of data frames.
+* **stringr**, for strings.
+* **forcats**, for factors.
+
+First, we need to install the package using `install.packages("tidyverse")` command.
+
+```{r}
+library(tidyverse)
+```
+
+## Reading a dataset available in R
+
+The dataset `gapminder` is an excerpt of the Gapminder data on life expectancy, GDP per capita, and population by country.
+
+```{r}
+#install.packages("gapminder")
+library(gapminder) 
+gapminder
+```
+
+Let's explore this dataset.
+
+How many countries does this dataset have?
+```{r}
+unique(gapminder$country)
+```
+Identify NA's in the dataset
+```{r}
+summary(gapminder)
+```
+
+Now let's create our first plot.
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap, y = lifeExp))
+p + geom_point()
+```
+
+The process to create plots using `ggplot` is adding layers to the plot.
+
+Let's create a smoothed line and shaded in a ribbon showing the standard error for the line.
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp))
+p + geom_smooth()
+```
+
+Now, let's create a plot adding the data points the line together
+
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp))
+p + geom_point() + geom_smooth() 
+```
+
+Changing the color of the points
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp)) +
+  geom_point(color = "orange") + 
+  geom_smooth() 
+p
+```
+
+We can change the color of the smoothed line
+
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp)) +
+  geom_point(color = "blue") + 
+  geom_smooth(fill="purple",color="darkorange",size=2)
+p
+```
+
+I know, the colors combination are not the best one. But this is just to show `ggplot` flexibility.
+
+Changing the points color by group.
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp, 
+                          color = continent)) +
+  geom_point() + 
+  geom_smooth(fill="purple",color="darkorange",size=2)
+p
+```
+
+In this plot, the data is quite concentrated on the left side. Gross Domestic Product per capita is not normally distributed across our country years. To force some linearity the x-axis scale can be transformed to a log scale. The funcion `scale_x_log10()` can be used to scale the x-axis to a log 10 basis.
+
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp, color = continent))
+p + geom_point() +
+    geom_smooth(fill="purple",color="cyan",size=2, method = "loess") +
+    scale_x_log10()
+```
+Besides `scale_x_log10()` you can try `scale_x_sqrt()` and `scale_x_reverse()`. The corresponding functions for y-axis transformations just need to write y instead of x. 
+
+
+We can map the continent variable to the color aesthetic.
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent))
+p + geom_point() +
+    geom_smooth(method = "loess") +
+    scale_x_log10()
+```
+
+Or we can map the continent variable to the color aesthetic, and correcting the error bars using the fill aesthetic.
+
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent,
+                          fill = continent))
+p + geom_point() +
+    geom_smooth(method = "loess") +
+    scale_x_log10()
+```
+
+With `ggplot` we can control all the details of the plot.
+```{r}
+p <- ggplot(data = gapminder, mapping = aes(x = gdpPercap, y=lifeExp))
+p + geom_point(alpha = 0.3) +
+    geom_smooth(method = "gam") +
+    scale_x_log10(labels = scales::dollar) +
+    labs(x = "GDP Per Capita", y = "Life Expectancy in Years",
+         title = "Economic Growth and Life Expectancy",
+         subtitle = "Data points are country-years",
+         caption = "Source: Gapminder.")
+```
+
+<span style="color:red">**Exercise 1:**</span> Now, it is your turn. Using the same variables (`gdpPercap`, `lifeExp`, `continent`, and any other you thing can bring valuable information), create a new plot using `ggplot`. You can change the colors, the points size, and more...
+
+
+
+# Yes, we did it again!!!
+
+![](https://media.giphy.com/media/xhXb2x70JWEcU/giphy.gif)
+
+# Congratulations ladies and thanks for coming today! 
+
+
+Source used for this code can be found [here](https://socviz.co/makeplot.html)
