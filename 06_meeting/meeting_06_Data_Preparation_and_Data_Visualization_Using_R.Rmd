@@ -40,7 +40,7 @@ We selected the following datasets:
 ![](https://media.giphy.com/media/Qi1VkU2qYAyeQ/giphy.gif){width=250px}
 </center>
 
-The csv files are available in our GitHub repository and for the goal of this workshop, we've deleted some columns from the datasets with the name endend with "_workshop.csv"
+The csv files are available in our GitHub repository and for the goal of this workshop, we've deleted some columns from the datasets with the name ending with "_workshop.csv"
 
 ## Workshop 
 
@@ -68,12 +68,12 @@ The csv files are available in our GitHub repository and for the goal of this wo
 9. Is there any missing data? If yes, remove the rows with at least one column with `NA`
 10. If it makes sense, create new variables from the column that represents date (ex.: `month`,`year`, `weekdays`,`quarters`)
 11. Create any other variable you think will provide insights
-12. Create summarized tables using Data manipulation with`dplyr`: On meeting #5 you will find some examples on how to use the `dplyr` functions `select`, `filter`, `arrange`, `rename`, `mutate`, and `summarise`
-13. Create plots using `ggplot2`. Example: barplots, boxplots, histograms, time series plots, scatter plot, among others. Search on Google different ways to present the results by month or year, by groups... You can find some examples on meeting #4 and meeting #5.
+12. Create summarized tables using Data manipulation with`dplyr`: In meeting #5 you will find some examples on how to use the `dplyr` functions `select`, `filter`, `arrange`, `rename`, `mutate`, and `summarise`
+13. Create plots using `ggplot2`. Example: barplots, boxplots, histograms, time series plots, scatter plot, among others. Search on Google different ways to present the results by month or year, by groups... You can find some examples in meeting #4 and meeting #5.
 
 ### Storytelling
 
-Make a small report in word or a presentation in powerpoint showing your finds. Were you able to answer the analytical questions?
+Make a small report in Word or a presentation in PowerPoint showing your finds. Were you able to answer the analytical questions?
 
 If you liked the dataset topic, you can keep working on it in R and use the R code you developed as part of your GitHub work portfolio. 
 
