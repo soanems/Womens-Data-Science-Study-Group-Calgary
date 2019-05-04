@@ -1,0 +1,172 @@
+---
+title: "Intro to R Markdown (Part 1)"
+author: "Soane Mota"
+date: "May 4, 2019"
+output: html_document
+---
+
+```{r, out.width='20%', fig.align='center', fig.cap='', echo=FALSE}
+knitr::include_graphics('hex-rmarkdown.png')
+```
+
+The `rmarkdown` package is a relatively complete ecosystem for authoring documents.
+The tasks that you could do with R Markdown are:
+
+* Compile a single R Markdown document to a report in different formats, such as PDF, HTML, or Word.
+* Create notebooks in which you can directly run code chunks interactively.
+* Make slides for presentations (HTML5, LaTeX Beamer, or PowerPoint).
+* Produce dashboards with flexible, interactive, and attractive layouts.
+* Build interactive applications based on Shiny.
+* Write journal articles.
+* Author books of multiple chapters.
+* Generate websites and blogs.
+
+
+## Document Metadata
+
+The body of a document follows the metadata. 
+* The syntax for text (also known as prose or narratives) is Markdown. 
+* Two types of computer code
+  - R code chunks and inline R code
+  
+### Markdown Syntax
+
+You can write your report in plain text. 
+
+* _Italic_ is surrounded by underscores or asterisks, e.g., ```_text_``` or ```*text*```. 
+* **Bold** the text by using a pair of double asterisks (```**text**```)
+* To subscript the text uses a pair of tildes (~) (e.g., ```H~2~O``` renders H~2~O). 
+* To superscript uses a pair of carets (^) (e.g., ```Cu^2+^``` renders Cu^2+^).
+* Hyperlinks ```[text](link)```, e.g., ```[RStudio](https://www.rstudio.com)```
+* Images: just add an exclamation mark, e.g., ```![alt text or image title](path/to/image)```. 
+* Footnotes: put inside the square brackets after a caret ```^[]```, e.g., ```^[This is a footnote.]```.
+
+Section headers:
+
+```# First-level header```
+
+```## Second-level header```
+
+```### Third-level header```
+
+
+Unordered list:
+
+The items start with *, -, or +, and it  can be nested one list within another list by indenting the sub-list
+```
+- one item
+- one item
+- one item
+    - one more item
+    - one more item
+    - one more item
+```
+
+Ordered list:
+
+The items start with numbers (you can also nest lists within lists)
+```
+1. the first item
+2. the second item
+3. the third item
+    - one unordered item
+    - one unordered item
+```
+
+### R code chunks and inline R code
+
+To insert an R code chunk you can either use the RStudio toolbar (the Insert button) or the keyboard shortcut ```Ctrl + Alt + I``` (```Cmd + Option + I``` on macOS).
+
+In a code chunk you can produce text output, tables, or graphics and you have control over all these output via chunk options, which can be provided inside the curly braces (between ``` ```{r and }```).
+
+
+
+## Plots
+
+```{r package_options, include=FALSE}
+library(tidyverse)
+```
+
+```{r}
+# All defaults
+ggplot(cars, aes(speed, dist)) + geom_point()
+```
+
+
+```{r out.width = "50%"}
+ggplot(cars, aes(speed, dist)) + geom_point()
+```
+
+## Tables
+
+To work with tables, we can use the libraries
+
+```
+install.packages("kableExtra")
+```
+```{r }
+library(knitr)
+library(kableExtra)
+```
+
+Let's use the mtcars dataset available in R
+```{r}
+dt <- mtcars[1:7, 1:6]
+```
+
+The basic HTML output of `kable`.
+
+```{r}
+kable(dt)
+```
+
+The HTML table using the `kable_styling()` apply twitter bootstrap theme to the table.
+
+```{r}
+dt %>%
+  kable() %>%
+  kable_styling()
+```
+
+There are some predefined classes that you can use as `striped`, `bordered`, `hover`, `condensed`, and `responsive`.
+
+```{r}
+kable(dt) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+For shorter row height, you can use the option `condensed`.
+
+```{r}
+kable(dt) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+For more examples of how to manipulate table styles [here](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+
+
+Now, it is your turn to create a beatiful HTML document in Rmarkown. 
+Use one of the datasets from the last meeting and please, includes:
+
+* Image
+* GIF
+* text
+* plots
+* tables
+* hyperlinks
+* Titles
+* Other things you want
+
+
+<center>
+![](https://media.giphy.com/media/1Zp8tUAMkOZDMkqcHb/giphy.gif)
+</center>
+
+
+
+This presentation was based on 
+
+* [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+* [R Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+* [HTML Table with knitr::kable and kableExtra](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
