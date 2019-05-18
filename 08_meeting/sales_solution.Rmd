@@ -1,0 +1,175 @@
+---
+title: "Create HTML document in R Markdown - Sales Solution"
+author: "Soane Mota"
+date: "May 18, 2019"
+output:
+  html_document
+---
+
+The dataset [Retail Data Analytics](https://www.kaggle.com/manjeetsingh/retaildataset/downloads/retail-data-analytics.zip/2) is avaliable on Kaggle and provides with historical sales data for 45 stores located in different regions - each store contains a number of departments. 
+
+#### Stores
+Anonymized information about the 45 stores, indicating the type and size of store
+
+#### Features
+Contains additional data related to the store, department, and regional activity for the given dates.
+
+* Store - the store number
+* Date - the week
+* Temperature - average temperature in the region
+Fuel_Price - cost of fuel in the region
+* MarkDown1-5 - anonymized data related to promotional markdowns. MarkDown data is only available after Nov 2011, and is not available for all stores all the time. Any missing value is marked with an NA
+* CPI - the consumer price index
+* Unemployment - the unemployment rate
+* IsHoliday - whether the week is a special holiday week
+
+## Sales
+Historical sales data, which covers to 2010-02-05 to 2012-11-01. Within this tab you will find the following fields:
+
+* Store - the store number
+* Dept - the department number
+* Date - the week
+* Weekly_Sales -  sales for the given department in the given store
+* IsHoliday - whether the week is a special holiday week
+
+# Load libraries
+```{r package_options, include=FALSE}
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(plotly)
+```
+
+# Read dataset
+```{r}
+sales <- read_csv("retail-data-analytics/sales data-set.csv")
+features <- read_csv("retail-data-analytics/Features data set.csv")
+stores <- read_csv("retail-data-analytics/stores data-set.csv")
+```
+### Merging Datasets
+```{r}
+sales_complete <- merge(sales, stores, by="Store")
+sales_complete <- merge(sales_complete, features, by=c("Store","Date", "IsHoliday"))
+head(sales_complete)
+```
+
+### Data Processing
+```{r, echo=FALSE}
+sales$Date <- dmy(sales$Date)
+sales$IsHoliday <- sales$IsHoliday * 1
+sales_complete$Date <- dmy(sales_complete$Date)
+sales_complete$IsHoliday <- sales_complete$IsHoliday * 1
+
+str(sales)
+```
+
+
+### Subsetting 
+
+```{r}
+sales_complete_subset <- subset(sales_complete, Store >= 1 & Store <= 5)
+sales_subset <- subset(sales, Store >= 1 & Store <= 5)
+```
+
+```{r}
+sales_store1_dept1 <- sales_subset[which(sales_subset$Store==1 & sales_subset$Dept == 1),]
+
+sales_store1_dept2 <- sales_subset[which(sales_subset$Store==1 & sales_subset$Dept == 2),]
+
+sales_stores1to5_dept1 <-  sales_subset[which(sales_subset$Dept == 1),]
+```
+
+```{r}
+p <- plot_ly(sales_complete, x = ~log(Weekly_Sales), color = ~Type, type = "box")
+p
+
+```
+
+
+```{r}
+p <- plot_ly(sales_subset, x = ~Weekly_Sales, color = ~Store, type = "box")
+p
+```
+
+
+```{r}
+plot_ly(sales_store1_dept1, 
+        x = ~Date, y = ~ Weekly_Sales)
+
+```
+
+```{r}
+plot_ly(sales_store1_dept1, 
+        x = ~Date,
+        y = ~Weekly_Sales, 
+        type = 'scatter', 
+        mode = 'lines') %>%
+layout(title = "Weekly Sales: Store 1 and Dept 1") 
+```
+
+
+```{r}
+p1 <- plot_ly(sales_store1_dept1, x = ~Date, y = ~Weekly_Sales) %>% 
+  add_lines(name = "Store 1 Dept 1")
+p2 <- plot_ly(sales_store1_dept2, x = ~Date, y = ~Weekly_Sales) %>% 
+  add_lines(name = "Store 1 Dept 2")
+subplot(p1, p2)
+```
+
+
+
+Before we use the `subplot` function, we need to change our data format from long to wide using the function `spread`.
+
+```{r}
+sales_store1_dept1and2_wide <- spread(sales_stores1to5_dept1, Store, Weekly_Sales)
+
+# select only the columns to create the plot
+sales_store1_dept1and2_wide <- sales_store1_dept1and2_wide[c("Date",1:5)]
+
+# rename the columns
+names(sales_store1_dept1and2_wide) <- c("Date", "Store1","Store2","Store3","Store4", "Store5")
+``` 
+
+
+```{r}
+vars <- setdiff(names(sales_store1_dept1and2_wide), "Date")
+plots <- lapply(vars, function(var) {
+  plot_ly(sales_store1_dept1and2_wide, x = ~Date, y = as.formula(paste0("~", var))) %>%
+    add_lines(name = var)
+})
+subplot(plots, nrows = length(plots), shareX = TRUE, titleX = FALSE)
+```
+
+
+```{r, echo=FALSE, fig.height = 5, fig.width = 9, fig.align = "center",  warning=FALSE}
+sales_complete_subset %>%
+    plot_ly(x = ~Temperature, y = ~Weekly_Sales, size = ~Size) %>%
+    add_markers(color = ~factor(Store), frame = ~week(Date), ids = ~Dept) 
+```
+
+
+Now, it is your turn to create a beautiful HTML report from the provided Dataset in Rmarkown.Add in your report at least one
+
+* Image
+* GIF
+* text
+* plots
+* tables
+* hyperlinks
+* titles
+* Other things you want
+
+
+# Happy Victoria Day!!!
+<center>
+![](https://media.giphy.com/media/vY4pH7pKJwTXa/giphy.gif)
+</center>
+
+
+
+This presentation was based on 
+
+* [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+* [R Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+* [HTML Table with knitr::kable and kableExtra](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+* [Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com/arranging-views.html)
