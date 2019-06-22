@@ -1,0 +1,122 @@
+---
+title: "Bank Marketing Campaign"
+author: "Soane Mota"
+date: "June 15, 2019"
+output: html_document
+---
+
+## Import libraries
+```{r Load libraries, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+# Load Dataset
+```{r Load dataset ,message=FALSE}
+df <- read_csv("bank.csv")
+```
+
+
+```{r, message=FALSE}
+dim(df)
+```
+
+```{r, message=FALSE}
+head(df)
+```
+
+```{r, , message=FALSE}
+summary(df)
+```
+# How to extract unique classes/levels
+```{r}
+df$poutcome<- factor(df$poutcome)
+#unique(df$marital) # view of the unique classes
+levels(df$poutcome)
+```
+
+```{r}
+table(df$poutcome)
+```
+
+# Subset dataset
+```{r}
+# based on variable values
+subset <- df[which(df$poutcome=='failure' | df$poutcome == "success"), ]
+subset$poutcome<- factor(subset$poutcome)
+dim(subset)
+```
+
+```{r}
+head(subset)
+```
+
+```{r}
+table(subset$poutcome)
+```
+
+# What is the success ratio of the campaign?
+```{r}
+total_success <- sum(subset$poutcome == "success")
+total_failure <- sum(subset$poutcome == "failure")
+
+M1 <- total_success /(total_success + total_failure)
+M2 <- total_success /total_failure
+```
+
+```{r}
+M1
+``` 
+```{r}
+M2
+``` 
+
+# Meeting #10
+
+# Age distribution
+```{r}
+barfill <- "#4293ae"
+barlines <- "#1F3552"
+
+
+p1 <- ggplot(df, aes(x = age)) +
+        geom_histogram(aes(y = ..count..), binwidth = 5,
+                       colour = barlines, fill = barfill) +
+        scale_x_continuous(name = "Mean ozone in\nparts per billion",
+                           breaks = seq(0, 175, 25),
+                           limits=c(0, 175)) +
+        scale_y_continuous(name = "Count") +
+        ggtitle("Frequency histogram of mean ozone")
+p1
+
+```
+#Age distribution according to the marriage status 
+
+# Age distribution according to the marriage status from customers  defaulted before.
+
+#Marital status in the dataset
+
+# Marital response
+
+# Education
+
+# Education response
+
+# Call duration 
+
+# Month distribution
+
+# Month response
+
+# Job
+
+# Job response
+
+
+# Loan 
+
+# Loan response
+
+
+# Housing
+
+# Housing distribution
